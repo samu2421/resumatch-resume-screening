@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>DGital - Digital Agency HTML Template</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="img/favicon.ico" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500&family=Jost:wght@500;600;700&display=swap" rel="stylesheet"> 
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="lib/animate/animate.min.css" rel="stylesheet">
+    <link href="lib/owlcarousel/assets/owl.carousel.min.css" rel="stylesheet">
+    <link href="lib/lightbox/css/lightbox.min.css" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Template Stylesheet -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="container-xxl bg-white p-0">
+        <!-- Spinner Start -->
+        <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
+            <div class="spinner-grow text-primary" style="width: 3rem; height: 3rem;" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+        <!-- Spinner End -->
+
+
+        <!-- Navbar & Hero Start -->
+        <div class="container-xxl position-relative p-0">
+            <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
+                <a href="" class="navbar-brand p-0">
+                    <h1 class="m-0">ResuMatch </h1>
+                    <!-- <img src="img/logo.png" alt="Logo"> -->
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
+                    <span class="fa fa-bars"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarCollapse">
+                    <div class="navbar-nav mx-auto py-0">
+                        <a href="index.html" class="nav-item nav-link active">Home</a>
+                        <a href="#footer" class="nav-item nav-link">About</a>
+                        <a href="service.html" class="nav-item nav-link">Service</a>
+                        <a href="project.html" class="nav-item nav-link">Project</a>
+                    </div>
+                    <a href="" class="btn rounded-pill py-2 px-4 ms-3 d-none d-lg-block">Get Started</a>
+                </div>
+            </nav>
+
+            <div class="container-xxl bg-primary hero-header">
+                <div class="container px-lg-5">
+                    <div class="row g-5 align-items-end">
+                        <div class="col-lg-6 text-center text-lg-start">
+                            <h1 class="text-white mb-4 animated slideInDown">Transform Recruitment with AI-Scan, Match, and Hire the Best in Seconds!</h1>
+                            <p class="text-white pb-3 animated slideInDown">Let AI take the hassle out of recruitment by instantly scanning and matching resumes to job requirements.
+                                Save time, reduce bias, and hire top talent with speed and precision!</p>
+                                <a href="upload.html" class="btn btn-secondary py-sm-3 px-sm-5 rounded-pill">Upload Resume</a>
+                                <a href="#footer" class="btn btn-light py-sm-3 px-sm-5 rounded-pill animated slideInRight">About Us</a>
+                        </div>
+                        <div class="col-lg-6 text-center text-lg-start">
+                            <img class="img-fluid animated zoomIn" src="img/hero.png" alt="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Navbar & Hero End -->
+
+
+        <!-- Projects Start -->
+        <div class="container-xxl py-5">
+            <div class="container py-5 px-lg-5">
+                <div class="wow fadeInUp" data-wow-delay="0.1s">
+                    <p class="section-title text-secondary justify-content-center"><span></span>Our Project<span></span></p>
+                    <h1 class="text-center mb-5">Automated Resume Screening System using Machine Learning and Flask</h1>
+                </div>
+                <div class="row mt-n2 wow fadeInUp" data-wow-delay="0.3s">
+                    <h3 class="text-center mb-5">Project Proposal: AI-Powered Resume Screening Web Application<br>
+                        1. Project Title:<br>
+                        🚀 Automated Resume Screening System using Machine Learning and Flask<br>
+                        
+                        2. Project Overview<br>
+                        This project aims to build a web-based resume screening application that automates the process of filtering resumes based on job descriptions using Machine Learning (ML) models.<br>
+                        
+                        The web app will:<br>
+                        ✅ Accept resumes in PDF or DOCX format<br>
+                        ✅ Extract key information from resumes<br>
+                        ✅ Use Machine Learning to classify resumes into job categories<br>
+                        ✅ Match resumes with job descriptions to determine if the candidate is Shortlisted or Rejected<br>
+                        ✅ Display the result on a simple, user-friendly web interface<br>
+                        
+                        3. Problem Statement<br>
+                        Recruiters spend hours manually filtering resumes, making the hiring process slow and inefficient. This project aims to automate resume screening, allowing companies to quickly shortlist qualified candidates based on predefined job requirements.<br>
+                        
+                        4. Features & Functionalities<br>
+                        🖥️ User Interface (Frontend)<br>
+                        Simple and Responsive UI using Flask templates (HTML, CSS).<br>
+                        Upload Resume (Supports PDF, DOCX).<br>
+                        Job Description Input (Optional) – Recruiters can enter job requirements.<br>
+                        Submit Button – Processes resume and predicts Shortlisted / Rejected.<br>
+                        Download Report (Bonus Feature) – Generates a detailed feedback report.<br>
+                        ⚙️ Backend (Flask API)<br>
+                        Resume File Handling<br>
+                        
+                        Extract text from PDFs using PyPDF2/pdfplumber.<br>
+                        Extract text from DOCX using python-docx.<br>
+                        Ensure only text-based resumes (no images) are processed.<br>
+                        Text Preprocessing<br>
+                        
+                        Remove Stopwords, Tokenization, Lemmatization.<br>
+                        Use TF-IDF (Term Frequency-Inverse Document Frequency) for feature extraction.<br>
+                        Compare resume text with job descriptions using Cosine Similarity.<br>
+                        Machine Learning Model<br>
+                        
+                        Use Logistic Regression, Random Forest, or Naïve Bayes for classification.<br>
+                        Train model on labeled resume dataset (from Kaggle).<br>
+                        Save the trained model as a .pkl file using pickle.dump().<br>
+                        Load model during inference using pickle.load().<br>
+                        Prediction Logic<br>
+                        
+                        Classify resumes into job categories:<br>
+                        Data Science<br>
+                        Web Development<br>
+                        Software Engineer<br>
+                        H<br>
+                        Mechanical Engineer<br>
+                        Business Analyst<br>
+                        Compare resume content vs. job description to determine if the applicant matches the role.<br>
+                        If the match score is above a threshold, the resume is Shortlisted; otherwise, it is Rejected.<br>
+                        5. Technologies & Tools<br>
+                        Component	Technology	Description<br>
+                        Backend Framework	Flask	Lightweight web framework in Python<br>
+                        Data Extraction	PyPDF2/pdfplumber, python-docx	Extract text from resumes<br>
+                        Data Preprocessing	NLTK / SpaCy	Text cleaning and tokenization<br>
+                        Feature Engineering	scikit-learn	TF-IDF Vectorization<br>
+                        Machine Learning Model	Logistic Regression / Naïve Bayes	Text Classification<br>
+                        Model Serialization	Pickle	Save and load the ML model<br>
+                        Frontend	HTML/CSS	Simple Web Interface<br>
+                        Database (Optional)	MongoDB / SQLite	Store shortlisted candidates<br>
+                        Deployment	Docker + Heroku	Dockerize and deploy app<br>
+                        6. Project Folder Structure<br>
+                        php<br>
+                        Copy<br>
+                        Edit<br>
+                        resume_screening_app/<br>
+                        │── model/                  # Pickle model files  <br>
+                        │── templates/               # HTML templates (index.html, result.html)  <br>
+                        │── static/                  # CSS, JS files (Optional)  <br>
+                        │── app.py                   # Main Flask Application  <br>
+                        │── preprocess.py            # Text Processing Functions  <br>
+                        │── train_model.ipynb        # Jupyter Notebook for Model Training  <br>
+                        │── requirements.txt         # Project Dependencies  <br>
+                        │── Dockerfile               # For Docker Container  <br>
+                        │── .gitignore               # Ignore Unnecessary Files  <br>
+                        └── README.md                # Project Documentation  <br>
+                        7. Implementation Steps<br>
+                        Milestone	Description	Tools	Status<br>
+                        Idea Finalization	Define problem and dataset	-	✅ Done<br>
+                        Data Collection	Download Dataset (Kaggle or Manual Dataset)	Kaggle <br>
+                        Data Preprocessing	Text Cleaning, Tokenization, Stopwords Removal	NLTK, SpaCy	<br>
+                        Model Training	Train ML Model using Logistic Regression	Jupyter Notebook, Scikit-learn	<br>
+                        Flask Web App Development	Create Web Application for Resume Upload	Flask, HTML	<br>
+                        Model Integration	Integrate ML Model with Web App	Pickle, Flask<br>
+                        Dockerization (Bonus)	Containerize App using Docker	Docker<br>
+                        Deployment (Bonus)	Deploy App on Heroku/Render	Heroku<br>
+                        8. Bonus Features<br>
+                        ✅ Real-time Feedback – Show keyword match score between the resume and job description.<br>
+                        ✅ Cloud Deployment – Deploy the project on Heroku or AWS using Docker containers.<br>
+                        9. Expected Outcome<br>
+                        By the end of this project, you will have:<br>
+                        ✅ A fully functional Resume Screening Web Application<br>
+                        ✅ A trained ML model capable of classifying resumes into job categories<br>
+                        ✅ A Dockerized Flask App ready for cloud deployment<br>
+                        ✅ Basic Text Preprocessing and NLP skills<br>
+                        <br>
+                        10. Tools/Packages Required<br>
+                        Flask<br>
+                        Pandas<br>
+                        NLTK<br>
+                        Scikit-learn<br>
+                        PyPDF2<br>
+                        pdfplumber<br>
+                        python-docx<br>
+                        Pickle<br>
+                        Gunicorn (for deployment)<br>
+                        Docker</h3>
+                </div>
+            </div>
+        </div>
+        <!-- Projects End -->
+        
+
+        <!-- Footer Start -->
+        <div class="container-fluid bg-primary text-light footer wow fadeIn" data-wow-delay="0.1s">
+            
+            <div class="container px-lg-5">
+                <div class="copyright">
+                    <div class="row">
+                        <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
+                            &copy; <a class="border-bottom" href="#">ResuMatch</a>, All Right Reserved. 
+							
+							<!--/*** This template is free as long as you keep the footer author’s credit link/attribution link/backlink. If you'd like to use the template without the footer author’s credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+							Designed By <a class="border-bottom" href="https://htmlcodex.com">Samiksha & Aswin</a>
+                        </div>
+                        <div class="col-md-6 text-center text-md-end">
+                            <div class="footer-menu">
+                                <a href="">Home</a>
+                                <a href="">Cookies</a>
+                                <a href="">Help</a>
+                                <a href="">FQAs</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Footer End -->
+
+
+        <!-- Back to Top -->
+        <a href="#" class="btn btn-lg btn-secondary btn-lg-square back-to-top"><i class="bi bi-arrow-up"></i></a>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="lib/wow/wow.min.js"></script>
+    <script src="lib/easing/easing.min.js"></script>
+    <script src="lib/waypoints/waypoints.min.js"></script>
+    <script src="lib/counterup/counterup.min.js"></script>
+    <script src="lib/owlcarousel/owl.carousel.min.js"></script>
+    <script src="lib/isotope/isotope.pkgd.min.js"></script>
+    <script src="lib/lightbox/js/lightbox.min.js"></script>
+
+    <!-- Template Javascript -->
+    <script src="js/main.js"></script>
+</body>
+
+</html>
