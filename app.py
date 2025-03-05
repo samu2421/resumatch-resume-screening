@@ -1,16 +1,24 @@
-"""This module contains the Flask application for the Resume Screening API"""
+"""
+Flask application for resume screening and job category prediction.
+
+This module provides a web interface for uploading and analyzing resumes,
+using machine learning to predict job categories and extract skills.
+"""
 
 import os
 import secrets
 import logging
-from flask import Flask, request, jsonify
+from typing import Any
+
+from flask import Flask, request, render_template
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
 # Import from local modules
 from train_model import ResumeClassifier
 from preprocess import ResumePreprocessor, extract_resume_text
 
-# Configure logging with lazy formatting
+# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s: %(message)s',
@@ -22,14 +30,15 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+CORS(app)
 
-# Security configurations
+# Security and upload configurations
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
 app.config['UPLOAD_FOLDER'] = 'uploads'
-app.secret_key = secrets.token_hex(16)  # Secure secret key
+app.secret_key = secrets.token_hex(16)
 
 # Allowed file extensions
-ALLOWED_EXTENSIONS = {'pdf', 'docx'}
+ALLOWED_EXTENSIONS: set[str] = {'pdf', 'docx'}
 
 # Ensure uploads directory exists
 os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
@@ -39,121 +48,125 @@ classifier = ResumeClassifier()
 preprocessor = ResumePreprocessor()
 
 
-def allowed_file(filename):
+def allowed_file(filename: str) -> bool:
     """
-    Validate file extension and MIME type
+    Check if the uploaded file has an allowed extension.
 
     Args:
-        filename (str): Name of the file to validate
+        filename (str): Name of the file to check.
 
     Returns:
-        bool: True if file is allowed, False otherwise
+        bool: True if file extension is allowed, False otherwise.
     """
-    return '.' in filename and \
-           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    return (
+        '.' in filename and 
+        filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    )
 
 
-@app.route('/upload', methods=['POST'])
-def upload_resume():
+@app.route('/')
+def index() -> str:
     """
-    Secure resume upload and screening endpoint
+    Render the main index page.
 
     Returns:
-        JSON response with prediction and processing details
+        str: Rendered HTML template for the index page.
+    """
+    return render_template('index.html')
+
+
+@app.route('/upload')
+def upload() -> str:
+    """
+    Render the upload page.
+
+    Returns:
+        str: Rendered HTML template for the upload page.
+    """
+    return render_template('upload.html')
+
+
+@app.route('/upload_process', methods=['POST'])
+def upload_process() -> Any:
+    """
+    Process resume upload and perform analysis.
+
+    Returns:
+        Any: Rendered result template or error response.
     """
     try:
-        job_title = request.form.get('job_title')
+        job_title = request.form.get('jobTitle')
         if not job_title:
-            logger.warning('No job title provided')
-            return jsonify({
-                'error': 'Job title is required',
-                'status': 'failed'
-            }), 400
+            return "Job title is required", 400
 
-        # Check if resume file is present
-        if 'resume' not in request.files:
-            logger.warning('No file part in the request')
-            return jsonify({
-                'error': 'No file part',
-                'status': 'failed'
-            }), 400
+        if 'resumeUpload' not in request.files:
+            return "No file part", 400
 
-        resume_file = request.files['resume']
+        resume_file = request.files['resumeUpload']
 
-        # Additional security checks
         if not resume_file.filename:
-            logger.warning('No selected file')
-            return jsonify({
-                'error': 'No selected file',
-                'status': 'failed'
-            }), 400
+            return "No selected file", 400
 
         if not allowed_file(resume_file.filename):
-            logger.warning('Invalid file type: %s', resume_file.filename)
-            return jsonify({
-                'error': 'Invalid file type. Only PDF and DOCX allowed.',
-                'status': 'failed'
-            }), 400
+            return "Invalid file type. Only PDF and DOCX allowed.", 400
 
         # Secure filename
         filename = secure_filename(resume_file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
 
-        # Save file securely
+        # Save file
         resume_file.save(filepath)
 
-        # Log upload activity without sensitive details
-        logger.info('File uploaded: %s', filename)
+        # Extract resume text
+        resume_text = extract_resume_text(filepath)
 
-        try:
-            # Extract resume text
-            resume_text = extract_resume_text(filepath)
+        # Clean the resume text
+        cleaned_text = preprocessor.clean_text(resume_text)
 
-            # Clean the resume text
-            cleaned_text = preprocessor.clean_text(resume_text)
+        # Extract skills
+        skills = preprocessor.extract_skills(resume_text)
 
-            # Extract skills
-            skills = preprocessor.extract_skills(resume_text)
+        # Prediction
+        prediction_result = classifier.predict_category(cleaned_text)
 
-            # Prediction
-            prediction_result = classifier.predict_category(cleaned_text)
+        # Cleanup: Remove uploaded file
+        os.remove(filepath)
 
-            # Cleanup: Remove uploaded file
-            os.remove(filepath)
+        # Render result template with prediction data
+        return render_template(
+            'result.html',
+            job_category=prediction_result[0],
+            confidence_score=round(float(prediction_result[1]) * 100, 2),
+            job_match=75,  # You can modify this with actual matching logic
+            total_skills=len(skills),
+            skills=skills
+        )
 
-            return jsonify({
-                'prediction': prediction_result[0],
-                'confidence': float(prediction_result[1]),
-                'skills': skills,
-                'status': 'success'
-            })
-
-        except ValueError as process_error:
-            logger.error('Processing error: %s', str(process_error))
-            # Remove file if processing fails
-            if os.path.exists(filepath):
-                os.remove(filepath)
-
-            return jsonify({
-                'error': 'Resume processing failed',
-                'status': 'failed'
-            }), 500
-
-    except (IOError, OSError, RuntimeError) as e:
-        logger.critical('Critical upload error: %s', str(e))
-        return jsonify({
-            'error': 'Upload failed',
-            'status': 'failed'
-        }), 500
+    except Exception as e:
+        logger.error('Upload processing error: %s', str(e))
+        return "Resume processing failed", 500
 
 
-# Optional: Add a home route
-@app.route('/', methods=['GET'])
-def home():
+@app.route('/service')
+def service() -> str:
     """
-    Home route for the application
+    Render the service page.
+
+    Returns:
+        str: Rendered HTML template for the service page.
     """
-    return "Resume Screening Application"
+    return render_template('service.html')
+
+
+@app.route('/project')
+def project() -> str:
+    """
+    Render the project page.
+
+    Returns:
+        str: Rendered HTML template for the project page.
+    """
+    return render_template('project.html')
 
 
 if __name__ == '__main__':
