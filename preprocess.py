@@ -54,7 +54,7 @@ class ResumePreprocessor:
         text = text.lower()
 
         # Retain alphanumeric words, hyphens, and underscores
-        text = re.sub(r'[^a-zA-Z0-9+\-_ ]', '', text)
+        text = re.sub(r'[^a-zA-Z\s]', '', text)
 
         # Tokenize
         tokens = word_tokenize(text)
@@ -75,8 +75,11 @@ class ResumePreprocessor:
         text_lower = text.lower()
 
         # Find matched skills using fuzzy matching
-        matched_skills = [process.extractOne
-                          (text_lower, self.skills_list, score_cutoff=80)]
+        matched_skills = [
+            process.extractOne(skill, self.skills_list, score_cutoff=70)
+            for skill in text_lower.split()  # Split text into words
+        ]
+
         return list(set([skill[0] for skill in matched_skills if skill]))
 
     def extract_skills_spacy(self, text):
