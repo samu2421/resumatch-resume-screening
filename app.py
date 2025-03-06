@@ -11,7 +11,6 @@ import logging
 from typing import Any
 
 from flask import Flask, request, render_template
-from flask_cors import CORS
 from werkzeug.utils import secure_filename
 
 # Import from local modules
@@ -29,8 +28,10 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-app = Flask(__name__)
-CORS(app)
+app = Flask(__name__, 
+            static_folder='static',
+            static_url_path='/static',
+            template_folder='templates')
 
 # Security and upload configurations
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1024 * 1024  # 16MB max file size
@@ -59,7 +60,7 @@ def allowed_file(filename: str) -> bool:
         bool: True if file extension is allowed, False otherwise.
     """
     return (
-        '.' in filename and 
+        '.' in filename and
         filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
     )
 
@@ -72,6 +73,11 @@ def index() -> str:
     Returns:
         str: Rendered HTML template for the index page.
     """
+    # Debug prints for paths
+    print(f"Current Working Directory: {os.getcwd()}")
+    print(f"Templates Folder: {app.template_folder}")
+    print(f"Static Folder: {app.static_folder}")
+    
     return render_template('index.html')
 
 
@@ -142,9 +148,21 @@ def upload_process() -> Any:
             skills=skills
         )
 
+    except FileNotFoundError as e:
+        logger.error('File not found error: %s', str(e))
+        return "File not found", 404
+    except ValueError as e:
+        logger.error('Value error: %s', str(e))
+        return "Invalid input", 400
+    except (IOError, OSError) as e:
+        logger.error('File handling error: %s', str(e))
+        return "File handling error", 500
+    except RuntimeError as e:
+        logger.error('Runtime error: %s', str(e))
+        return "Runtime error occurred", 500
     except Exception as e:
-        logger.error('Upload processing error: %s', str(e))
-        return "Resume processing failed", 500
+        logger.error('Unexpected error: %s', str(e))
+        return "An unexpected error occurred", 500
 
 
 @app.route('/service')
