@@ -83,11 +83,11 @@ def upload_process() -> Any:
         # Get form data
         job_title = request.form.get('jobTitle')
         job_description = request.form.get('jobDescription')
-        
+
         # Validate required fields
         if not job_title:
             return "Job title is required", 400
-        
+
         if not job_description:
             return "Job description is required", 400
 
