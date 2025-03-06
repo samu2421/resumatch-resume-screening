@@ -1,19 +1,12 @@
 """
 Flask application for resume screening and job category prediction.
-
-This module provides a web interface for uploading and analyzing resumes,
-using machine learning to predict job categories and extract skills.
 """
-
 import os
 import secrets
 import logging
 from typing import Any
-
 from flask import Flask, request, render_template
 from werkzeug.utils import secure_filename
-
-# Import from local modules
 from train_model import ResumeClassifier
 from preprocess import ResumePreprocessor, extract_resume_text
 
@@ -28,7 +21,7 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-app = Flask(__name__, 
+app = Flask(__name__,
             static_folder='static',
             static_url_path='/static',
             template_folder='templates')
@@ -66,18 +59,10 @@ def allowed_file(filename: str) -> bool:
 
 
 @app.route('/')
-def index() -> str:
+def index():
     """
     Render the main index page.
-
-    Returns:
-        str: Rendered HTML template for the index page.
     """
-    # Debug prints for paths
-    print(f"Current Working Directory: {os.getcwd()}")
-    print(f"Templates Folder: {app.template_folder}")
-    print(f"Static Folder: {app.static_folder}")
-    
     return render_template('index.html')
 
 
@@ -85,9 +70,6 @@ def index() -> str:
 def upload() -> str:
     """
     Render the upload page.
-
-    Returns:
-        str: Rendered HTML template for the upload page.
     """
     return render_template('upload.html')
 
@@ -96,14 +78,18 @@ def upload() -> str:
 def upload_process() -> Any:
     """
     Process resume upload and perform analysis.
-
-    Returns:
-        Any: Rendered result template or error response.
     """
     try:
+        # Get form data
         job_title = request.form.get('jobTitle')
+        job_description = request.form.get('jobDescription')
+        
+        # Validate required fields
         if not job_title:
             return "Job title is required", 400
+        
+        if not job_description:
+            return "Job description is required", 400
 
         if 'resumeUpload' not in request.files:
             return "No file part", 400
@@ -116,11 +102,9 @@ def upload_process() -> Any:
         if not allowed_file(resume_file.filename):
             return "Invalid file type. Only PDF and DOCX allowed.", 400
 
-        # Secure filename
+        # Secure filename and save file
         filename = secure_filename(resume_file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-
-        # Save file
         resume_file.save(filepath)
 
         # Extract resume text
@@ -129,21 +113,28 @@ def upload_process() -> Any:
         # Clean the resume text
         cleaned_text = preprocessor.clean_text(resume_text)
 
-        # Extract skills
-        skills = preprocessor.extract_skills(resume_text)
+        # Extract skills using spaCy-based method
+        skills = preprocessor.extract_skills_spacy(resume_text)
 
-        # Prediction
-        prediction_result = classifier.predict_category(cleaned_text)
+        # Calculate job match score
+        job_match = calculate_job_match(cleaned_text, job_description)
+
+        # Prediction with probability confidence
+        prediction_result, confidence = classifier.predict_category(
+            cleaned_text)
+        confidence_score = round(float(confidence) * 100, 2)
 
         # Cleanup: Remove uploaded file
         os.remove(filepath)
 
-        # Render result template with prediction data
+        # Render result template
         return render_template(
             'result.html',
-            job_category=prediction_result[0],
-            confidence_score=round(float(prediction_result[1]) * 100, 2),
-            job_match=75,  # You can modify this with actual matching logic
+            job_title=job_title,
+            job_description=job_description,
+            job_category=prediction_result,
+            confidence_score=confidence_score,
+            job_match=job_match,
             total_skills=len(skills),
             skills=skills
         )
@@ -151,27 +142,58 @@ def upload_process() -> Any:
     except FileNotFoundError as e:
         logger.error('File not found error: %s', str(e))
         return "File not found", 404
+
     except ValueError as e:
         logger.error('Value error: %s', str(e))
         return "Invalid input", 400
-    except (IOError, OSError) as e:
+
+    except OSError as e:
         logger.error('File handling error: %s', str(e))
         return "File handling error", 500
+
     except RuntimeError as e:
         logger.error('Runtime error: %s', str(e))
         return "Runtime error occurred", 500
+
     except Exception as e:
         logger.error('Unexpected error: %s', str(e))
         return "An unexpected error occurred", 500
+
+
+def calculate_job_match(resume_text: str, job_description: str) -> int:
+    """
+    Calculate how well the resume matches the job description.
+
+    Args:
+        resume_text (str): Cleaned text from the resume
+        job_description (str): Job description from the form
+
+    Returns:
+        int: Match percentage (0-100)
+    """
+    # Clean the job description using the same preprocessor
+    cleaned_job_desc = preprocessor.clean_text(job_description)
+
+    # Convert texts to sets of words for comparison
+    resume_words = set(resume_text.lower().split())
+    job_words = set(cleaned_job_desc.lower().split())
+
+    # Find common words (excluding very common words)
+    common_words = resume_words.intersection(job_words)
+
+    # Calculate match score with adjusted scaling
+    if len(job_words) == 0:
+        return 50  # Default value if job description is empty
+
+    match_percentage = min(100, int(len(common_words) / len(job_words) * 120))
+
+    return match_percentage
 
 
 @app.route('/service')
 def service() -> str:
     """
     Render the service page.
-
-    Returns:
-        str: Rendered HTML template for the service page.
     """
     return render_template('service.html')
 
@@ -180,9 +202,6 @@ def service() -> str:
 def project() -> str:
     """
     Render the project page.
-
-    Returns:
-        str: Rendered HTML template for the project page.
     """
     return render_template('project.html')
 

@@ -1,45 +1,49 @@
 """
-This module contains helper functions for preprocessing resume text
+Improved Resume Preprocessing Module
 """
 import os
 import re
 import nltk
 import PyPDF2
 import docx
+import spacy
+from fuzzywuzzy import process
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
-from nltk.stem import WordNetLemmatizer
+from nltk.stem import PorterStemmer
 
 # Ensure NLTK resources are downloaded
 try:
     nltk.data.find('tokenizers/punkt')
     nltk.data.find('corpora/stopwords')
-    nltk.data.find('corpora/wordnet')
 except LookupError:
     nltk.download('punkt', quiet=True)
     nltk.download('stopwords', quiet=True)
-    nltk.download('wordnet', quiet=True)
+
+# Load spaCy NLP model for better skill extraction
+nlp = spacy.load("en_core_web_sm")
 
 
 class ResumePreprocessor:
     """
-    A class to preprocess resume text with cleaning and skill
-    extraction capabilities.
+    A class to preprocess resume text.
     """
 
     def __init__(self):
-        """
-        Initialize the preprocessor with a lemmatizer and English stopwords.
-        """
-        self.lemmatizer = WordNetLemmatizer()
-        self.stop_words = set(stopwords.words('english'))
+        """Initialize the preprocessor with a stemmer and custom stopwords."""
+        self.stemmer = PorterStemmer()
+        base_stopwords = set(stopwords.words('english'))
+
+        # Keep domain-related words while removing generic ones
+        keep_words = {"data", "analysis", "science", "machine", "learning"}
+        self.stop_words = base_stopwords - keep_words
+
         self.skills_list = [
-            'python', 'machine learning', 'data science', 'nlp',
-            'tensorflow', 'keras', 'sql', 'javascript', 'react',
-            'nodejs', 'flask', 'django', 'java', 'c++',
-            'data analysis', 'statistics', 'communication',
-            'project management', 'git', 'agile', 'docker',
-            'kubernetes', 'aws', 'azure', 'cloud computing'
+            'python', 'machine learning', 'data science', 'deep learning',
+            'tensorflow', 'keras', 'sql', 'javascript', 'react', 'nodejs',
+            'flask', 'django', 'java', 'c++', 'statistics', 'communication',
+            'project management', 'git', 'agile', 'docker', 'kubernetes',
+            'aws', 'azure', 'cloud computing', 'big data', 'nlp'
         ]
 
     def clean_text(self, text):
@@ -49,15 +53,15 @@ class ResumePreprocessor:
         # Convert to lowercase
         text = text.lower()
 
-        # Remove special characters and numbers
-        text = re.sub(r'[^a-zA-Z\s]', '', text)
+        # Retain alphanumeric words, hyphens, and underscores
+        text = re.sub(r'[^a-zA-Z0-9+\-_ ]', '', text)
 
         # Tokenize
         tokens = word_tokenize(text)
 
-        # Remove stopwords and lemmatize
+        # Remove stopwords and apply stemming
         cleaned_tokens = [
-            self.lemmatizer.lemmatize(token)
+            self.stemmer.stem(token)
             for token in tokens
             if token not in self.stop_words
         ]
@@ -66,40 +70,37 @@ class ResumePreprocessor:
 
     def extract_skills(self, text):
         """
-        Extract potential skills from resume text.
+        Extract potential skills from resume text using fuzzy matching.
         """
-        # Convert text to lowercase for matching
         text_lower = text.lower()
 
-        # Find matched skills
-        matched_skills = [
-            skill for skill in self.skills_list
-            if skill in text_lower
-        ]
+        # Find matched skills using fuzzy matching
+        matched_skills = [process.extractOne
+                          (text_lower, self.skills_list, score_cutoff=80)]
+        return list(set([skill[0] for skill in matched_skills if skill]))
 
-        return list(set(matched_skills))  # Remove duplicates
+    def extract_skills_spacy(self, text):
+        """
+        Extract skills using spaCy NER.
+        """
+        doc = nlp(text)
+        return [ent.text for ent in doc.ents if ent.label_ in ["ORG", "SKILL"]]
 
 
 def extract_resume_text(file_path):
     """
-    Extract text from different file types (PDF and DOCX).
-
-    Args:
-        file_path (str): Path to the resume file
-
-    Returns:
-        str: Extracted text from the resume
-
-    Raises:
-        ValueError: If an unsupported file type is provided
+    Extract text from PDF and DOCX resumes.
     """
-    # Determine file type and extract text
     file_extension = os.path.splitext(file_path)[1].lower()
 
     if file_extension == '.pdf':
         with open(file_path, 'rb') as file:
             reader = PyPDF2.PdfReader(file)
-            text = ''.join(page.extract_text() for page in reader.pages)
+            text = ''.join(
+                page.extract_text()
+                for page in reader.pages
+                if page.extract_text()
+            )
         return text
 
     elif file_extension == '.docx':
