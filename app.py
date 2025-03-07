@@ -5,10 +5,13 @@ import os
 import secrets
 import logging
 from typing import Any
+import nltk
 from flask import Flask, request, render_template
 from werkzeug.utils import secure_filename
 from train_model import ResumeClassifier
 from preprocess import ResumePreprocessor, extract_resume_text
+
+nltk.download('punkt')  # Download NLTK data for tokenization
 
 # Configure logging
 logging.basicConfig(
