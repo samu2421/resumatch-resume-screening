@@ -13,7 +13,7 @@ from preprocess import ResumePreprocessor, extract_resume_text
 
 
 # Ensure Render finds the NLTK data
-NLTK_DATA_PATH = os.path.join(os.getcwd(), "nltk_data")
+NLTK_DATA_PATH = os.getenv("NLTK_DATA", os.path.join(os.getcwd(), "nltk_data"))
 os.makedirs(NLTK_DATA_PATH, exist_ok=True)
 nltk.data.path.append(NLTK_DATA_PATH)
 
