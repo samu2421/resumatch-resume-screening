@@ -22,6 +22,15 @@ nltk.download("punkt_tab", download_dir=NLTK_DATA_PATH)
 nltk.download("stopwords", download_dir=NLTK_DATA_PATH)
 nltk.download("wordnet", download_dir=NLTK_DATA_PATH)
 
+try:
+    nltk.download("punkt_tab", download_dir=NLTK_DATA_PATH)
+    logging.info(f"Successfully downloaded punkt_tab to {NLTK_DATA_PATH}")
+    # Verify the download
+    nltk.data.find("tokenizers/punkt_tab")
+    logging.info("Successfully verified punkt_tab is accessible")
+except Exception as e:
+    logging.error(f"Error with punkt_tab: {str(e)}")
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO,
