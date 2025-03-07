@@ -11,7 +11,16 @@ from werkzeug.utils import secure_filename
 from train_model import ResumeClassifier
 from preprocess import ResumePreprocessor, extract_resume_text
 
-nltk.download('punkt')  # Download NLTK data for tokenization
+
+# Ensure Render finds the NLTK data
+NLTK_DATA_PATH = os.path.join(os.getcwd(), "nltk_data")
+os.makedirs(NLTK_DATA_PATH, exist_ok=True)
+nltk.data.path.append(NLTK_DATA_PATH)
+
+# Download required resources if not already downloaded
+nltk.download("punkt", download_dir=NLTK_DATA_PATH)
+nltk.download("stopwords", download_dir=NLTK_DATA_PATH)
+nltk.download("wordnet", download_dir=NLTK_DATA_PATH)
 
 # Configure logging
 logging.basicConfig(
