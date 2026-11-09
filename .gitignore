@@ -1,3 +1,22 @@
+# Virtual environments
 myvenv/
+venv/
+.venv/
+# Python
 __pycache__/
+*.pyc
+.pytest_cache/
+# OS / logs
 .DS_Store
+*.log
+# Runtime data
+uploads/
+nltk_data/
+data/*.csv
+# Secrets
+.env
+*.pem
+# Personal files (never commit)
+sample_resume.pdf
+*.pptx
+# Note: model/resume_classifier_pipeline.pkl and results/ are intentionally tracked.

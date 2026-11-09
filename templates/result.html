@@ -6,9 +6,6 @@
     <title>ResuMatch - AI Resume Screening Results</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     
-    <!-- Favicon -->
-    <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="icon">
-
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -124,6 +121,29 @@
                                     <span>{{ confidence_score }}%</span>
                                 </div>
                             </div>
+                            <h6 class="mb-2">Top 3 predicted categories</h6>
+                            <ol class="list-unstyled mb-0" id="top-predictions">
+                                {% for category, probability in top_predictions %}
+                                <li>{{ loop.index }}. {{ category }} &ndash; {{ probability }}%</li>
+                                {% endfor %}
+                            </ol>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="0.3s">
+                        <div class="service-item d-flex flex-column text-center rounded">
+                            <div class="service-icon flex-shrink-0">
+                                <i class="fa fa-key fa-2x"></i>
+                            </div>
+                            <h5 class="mb-3">Keyword Overlap with Job Description</h5>
+                            <div class="mb-4">
+                                <h3>Keyword overlap: {{ keyword_overlap }}%</h3>
+                                <p>Share of distinct job-description keywords (after cleaning) that also occur in the resume.</p>
+                            </div>
+                            <div class="progress mb-4">
+                                <div class="progress-bar bg-primary" role="progressbar" aria-valuenow="{{ keyword_overlap }}" aria-valuemin="0" aria-valuemax="100" style="width: {{ keyword_overlap }}%;">
+                                    <span>{{ keyword_overlap }}%</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -236,7 +256,10 @@
                 <div class="copyright">
                     <div class="row">
                         <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                            &copy; <a class="border-bottom" href="#">ResuMatch</a>, All Rights Reserved. 
+                            &copy; <a class="border-bottom" href="#">ResuMatch</a>, All Rights Reserved.<br>
+                            <!--/*** This template is free as long as you keep the footer author's credit link/attribution link/backlink. If you'd like to use the template without the footer author's credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                            Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a><br>
+                            Adapted by Samiksha Dhere and Aswin
                         </div>
                         <div class="col-md-6 text-center text-md-end">
                             <div class="footer-menu">

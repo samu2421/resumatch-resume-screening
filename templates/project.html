@@ -8,9 +8,6 @@
     <meta content="" name="keywords">
     <meta content="" name="description">
 
-    <!-- Favicon -->
-    <link href="{{ url_for('static', filename='img/favicon.ico') }}" rel="icon">
-
     <!-- Google Web Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -92,115 +89,57 @@
                     <h1 class="text-center mb-5">Automated Resume Screening System using Machine Learning and Flask</h1>
                 </div>
                 <div class="row mt-n2 wow fadeInUp" data-wow-delay="0.3s">
-                    <h3 class="text-center mb-5">Project Proposal: AI-Powered Resume Screening Web Application<br>
-                        1. Project Title:<br>
-                        🚀 Automated Resume Screening System using Machine Learning and Flask<br>
-                        
-                        2. Project Overview<br>
-                        This project aims to build a web-based resume screening application that automates the process of filtering resumes based on job descriptions using Machine Learning (ML) models.<br>
-                        
-                        The web app will:<br>
-                        ✅ Accept resumes in PDF or DOCX format<br>
-                        ✅ Extract key information from resumes<br>
-                        ✅ Use Machine Learning to classify resumes into job categories<br>
-                        ✅ Match resumes with job descriptions to determine if the candidate is Shortlisted or Rejected<br>
-                        ✅ Display the result on a simple, user-friendly web interface<br>
-                        
-                        3. Problem Statement<br>
-                        Recruiters spend hours manually filtering resumes, making the hiring process slow and inefficient. This project aims to automate resume screening, allowing companies to quickly shortlist qualified candidates based on predefined job requirements.<br>
-                        
-                        4. Features & Functionalities<br>
-                        🖥️ User Interface (Frontend)<br>
-                        Simple and Responsive UI using Flask templates (HTML, CSS).<br>
-                        Upload Resume (Supports PDF, DOCX).<br>
-                        Job Description Input (Optional) – Recruiters can enter job requirements.<br>
-                        Submit Button – Processes resume and predicts Shortlisted / Rejected.<br>
-                        Download Report (Bonus Feature) – Generates a detailed feedback report.<br>
-                        ⚙️ Backend (Flask API)<br>
-                        Resume File Handling<br>
-                        
-                        Extract text from PDFs using PyPDF2/pdfplumber.<br>
-                        Extract text from DOCX using python-docx.<br>
-                        Ensure only text-based resumes (no images) are processed.<br>
-                        Text Preprocessing<br>
-                        
-                        Remove Stopwords, Tokenization, Lemmatization.<br>
-                        Use TF-IDF (Term Frequency-Inverse Document Frequency) for feature extraction.<br>
-                        Compare resume text with job descriptions using Cosine Similarity.<br>
-                        Machine Learning Model<br>
-                        
-                        Use Logistic Regression, Random Forest, or Naïve Bayes for classification.<br>
-                        Train model on labeled resume dataset (from Kaggle).<br>
-                        Save the trained model as a .pkl file using pickle.dump().<br>
-                        Load model during inference using pickle.load().<br>
-                        Prediction Logic<br>
-                        
-                        Classify resumes into job categories:<br>
-                        Data Science<br>
-                        Web Development<br>
-                        Software Engineer<br>
-                        H<br>
-                        Mechanical Engineer<br>
-                        Business Analyst<br>
-                        Compare resume content vs. job description to determine if the applicant matches the role.<br>
-                        If the match score is above a threshold, the resume is Shortlisted; otherwise, it is Rejected.<br>
-                        5. Technologies & Tools<br>
-                        Component	Technology	Description<br>
-                        Backend Framework	Flask	Lightweight web framework in Python<br>
-                        Data Extraction	PyPDF2/pdfplumber, python-docx	Extract text from resumes<br>
-                        Data Preprocessing	NLTK / SpaCy	Text cleaning and tokenization<br>
-                        Feature Engineering	scikit-learn	TF-IDF Vectorization<br>
-                        Machine Learning Model	Logistic Regression / Naïve Bayes	Text Classification<br>
-                        Model Serialization	Pickle	Save and load the ML model<br>
-                        Frontend	HTML/CSS	Simple Web Interface<br>
-                        Database (Optional)	MongoDB / SQLite	Store shortlisted candidates<br>
-                        Deployment	Docker + Heroku	Dockerize and deploy app<br>
-                        6. Project Folder Structure<br>
-                        php<br>
-                        Copy<br>
-                        Edit<br>
-                        resume_screening_app/<br>
-                        │── model/                  # Pickle model files  <br>
-                        │── templates/               # HTML templates (index.html, result.html)  <br>
-                        │── static/                  # CSS, JS files (Optional)  <br>
-                        │── app.py                   # Main Flask Application  <br>
-                        │── preprocess.py            # Text Processing Functions  <br>
-                        │── train_model.ipynb        # Jupyter Notebook for Model Training  <br>
-                        │── requirements.txt         # Project Dependencies  <br>
-                        │── Dockerfile               # For Docker Container  <br>
-                        │── .gitignore               # Ignore Unnecessary Files  <br>
-                        └── README.md                # Project Documentation  <br>
-                        7. Implementation Steps<br>
-                        Milestone	Description	Tools	Status<br>
-                        Idea Finalization	Define problem and dataset	-	✅ Done<br>
-                        Data Collection	Download Dataset (Kaggle or Manual Dataset)	Kaggle <br>
-                        Data Preprocessing	Text Cleaning, Tokenization, Stopwords Removal	NLTK, SpaCy	<br>
-                        Model Training	Train ML Model using Logistic Regression	Jupyter Notebook, Scikit-learn	<br>
-                        Flask Web App Development	Create Web Application for Resume Upload	Flask, HTML	<br>
-                        Model Integration	Integrate ML Model with Web App	Pickle, Flask<br>
-                        Dockerization (Bonus)	Containerize App using Docker	Docker<br>
-                        Deployment (Bonus)	Deploy App on Heroku/Render	Heroku<br>
-                        8. Bonus Features<br>
-                        ✅ Real-time Feedback – Show keyword match score between the resume and job description.<br>
-                        ✅ Cloud Deployment – Deploy the project on Heroku or AWS using Docker containers.<br>
-                        9. Expected Outcome<br>
-                        By the end of this project, you will have:<br>
-                        ✅ A fully functional Resume Screening Web Application<br>
-                        ✅ A trained ML model capable of classifying resumes into job categories<br>
-                        ✅ A Dockerized Flask App ready for cloud deployment<br>
-                        ✅ Basic Text Preprocessing and NLP skills<br>
-                        <br>
-                        10. Tools/Packages Required<br>
-                        Flask<br>
-                        Pandas<br>
-                        NLTK<br>
-                        Scikit-learn<br>
-                        PyPDF2<br>
-                        pdfplumber<br>
-                        python-docx<br>
-                        Pickle<br>
-                        Gunicorn (for deployment)<br>
-                        Docker</h3>
+                    <div class="col-12 text-start">
+                        <h4 class="mb-3">1. Overview</h4>
+                        <p>ResuMatch is a Flask web application. You upload a resume (PDF or DOCX) and enter a job title and job description. The app then shows:</p>
+                        <ul>
+                            <li>the predicted job category (one of 25) with a confidence score, plus the three most likely categories with their probabilities,</li>
+                            <li>the skills from a fixed skills list that occur in the resume,</li>
+                            <li>the keyword overlap between the resume and the job description.</li>
+                        </ul>
+                        <p>The app does not shortlist or reject candidates; the results are meant to support a human reviewer.</p>
+
+                        <h4 class="mb-3 mt-4">2. How it works</h4>
+                        <ul>
+                            <li><strong>Text extraction:</strong> PyPDF2 for PDF files and python-docx for DOCX files. Only text-based files work; scanned images are not read. The upload is stored in a temporary file that is always deleted after processing.</li>
+                            <li><strong>Preprocessing (NLTK):</strong> lower-casing, keeping letters only, tokenisation (punkt_tab), removal of English stopwords (the words data, analysis, science, machine and learning are kept) and Porter stemming. Training and prediction use exactly the same preprocessing.</li>
+                            <li><strong>Classification (scikit-learn):</strong> TF-IDF features (unigrams and bigrams, at most 10,000 features, min_df=2, max_df=0.85) and a Logistic Regression classifier (class_weight="balanced"). The confidence score is the probability of the predicted category.</li>
+                            <li><strong>Skill matching:</strong> case-insensitive whole-word and whole-phrase matching against a list of 26 skills, including multi-word skills such as "machine learning".</li>
+                            <li><strong>Keyword overlap:</strong> the percentage of distinct job-description keywords (after the same cleaning) that also occur in the resume.</li>
+                        </ul>
+
+                        <h4 class="mb-3 mt-4">3. Data and evaluation</h4>
+                        <ul>
+                            <li><strong>Dataset:</strong> the Kaggle "Resume Dataset" with 962 rows and 25 job categories. After removing exact duplicate resumes, 166 unique resumes remain.</li>
+                            <li><strong>Model comparison:</strong> Multinomial Naive Bayes, Logistic Regression and a linear SVM were compared with stratified 3-fold cross-validation on the 166 unique resumes (3 folds because the smallest category has only 3 unique resumes).</li>
+                            <li><strong>Selected model:</strong> Logistic Regression, with a mean accuracy of 0.85 &plusmn; 0.03 and a macro F1 of 0.80 &plusmn; 0.03 (3-fold CV). The linear SVM scored slightly higher but gives no probabilities, and calibrating it is not possible with so few resumes in the smallest categories. The model was chosen on the same folds, so these scores are slightly optimistic.</li>
+                        <li><strong>Hyperparameter tuning:</strong> tuning the regularisation strength, class weights and TF-IDF settings with nested cross-validation gave a macro F1 of 0.78 &plusmn; 0.04 (accuracy 0.84 &plusmn; 0.03), which is not better than the untuned model, so the untuned Logistic Regression is used.</li>
+                            <li><strong>Why not the earlier 95%:</strong> evaluating without removing duplicates gave about 95% accuracy, because almost every test resume had an identical copy in the training data.</li>
+                            <li><strong>Deployment of the model:</strong> the final model is trained on all 166 unique resumes, saved with pickle and loaded once when the app starts.</li>
+                        </ul>
+
+                        <h4 class="mb-3 mt-4">4. Technologies</h4>
+                        <p>Python, Flask, Gunicorn, scikit-learn, NLTK, pandas, PyPDF2, python-docx, pickle, pytest, and an HTML/Bootstrap template by HTML Codex.</p>
+
+                        <h4 class="mb-3 mt-4">5. Project structure</h4>
+                        <ul>
+                            <li><strong>app.py</strong> &ndash; Flask routes and request handling</li>
+                            <li><strong>preprocess.py</strong> &ndash; NLTK setup, text cleaning, skill matching, keyword overlap, text extraction</li>
+                            <li><strong>train_model.py</strong> &ndash; deduplication, model comparison, evaluation and training</li>
+                            <li><strong>model/resume_classifier_pipeline.pkl</strong> &ndash; the trained pipeline</li>
+                            <li><strong>results/metrics.json</strong> &ndash; evaluation results</li>
+                            <li><strong>EDA.ipynb</strong> &ndash; exploratory data analysis</li>
+                            <li><strong>templates/</strong>, <strong>static/</strong> &ndash; web pages and assets</li>
+                            <li><strong>tests/</strong> &ndash; pytest tests</li>
+                        </ul>
+
+                        <h4 class="mb-3 mt-4">6. Limitations</h4>
+                        <ul>
+                            <li>The model is trained on only 166 unique resumes, so predictions for less common categories are unreliable.</li>
+                            <li>Skill matching only finds skills from the fixed list.</li>
+                            <li>Keyword overlap compares words, not meaning.</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -214,10 +153,10 @@
                 <div class="copyright">
                     <div class="row">
                         <div class="col-md-6 text-center text-md-start mb-3 mb-md-0">
-                            &copy; <a class="border-bottom" href="#">ResuMatch</a>, All Right Reserved. 
-							
-							<!--/*** This template is free as long as you keep the footer author's credit link/attribution link/backlink. If you'd like to use the template without the footer author's credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
-							Designed By <a class="border-bottom" href="https://htmlcodex.com">Samiksha & Aswin</a>
+                            &copy; <a class="border-bottom" href="#">ResuMatch</a>, All Right Reserved.<br>
+                            <!--/*** This template is free as long as you keep the footer author's credit link/attribution link/backlink. If you'd like to use the template without the footer author's credit link/attribution link/backlink, you can purchase the Credit Removal License from "https://htmlcodex.com/credit-removal". Thank you for your support. ***/-->
+                            Designed By <a class="border-bottom" href="https://htmlcodex.com">HTML Codex</a><br>
+                            Adapted by Samiksha Dhere and Aswin
                         </div>
                         <div class="col-md-6 text-center text-md-end">
                             <div class="footer-menu">

@@ -1,0 +1,327 @@
+{
+  "dataset": {
+    "rows_before_dedup": 962,
+    "rows_after_dedup": 166,
+    "duplicates_removed": 796,
+    "categories": 25,
+    "min_unique_resumes_per_category": 3
+  },
+  "model_comparison": {
+    "cv": "stratified 3-fold, shuffle=True, random_state=42, deduplicated data, same folds for all models",
+    "features": "TF-IDF (1-2 grams, max_features=10000, min_df=2, max_df=0.85)",
+    "results": {
+      "MultinomialNB": {
+        "n_splits": 3,
+        "accuracy": {
+          "mean": 0.3557,
+          "std": 0.0474,
+          "per_fold": [
+            0.3036,
+            0.3455,
+            0.4182
+          ]
+        },
+        "precision_macro": {
+          "mean": 0.2192,
+          "std": 0.0194,
+          "per_fold": [
+            0.206,
+            0.205,
+            0.2467
+          ]
+        },
+        "recall_macro": {
+          "mean": 0.2511,
+          "std": 0.0355,
+          "per_fold": [
+            0.2167,
+            0.2367,
+            0.3
+          ]
+        },
+        "f1_macro": {
+          "mean": 0.2086,
+          "std": 0.0283,
+          "per_fold": [
+            0.1826,
+            0.1952,
+            0.248
+          ]
+        }
+      },
+      "LogisticRegression": {
+        "n_splits": 3,
+        "accuracy": {
+          "mean": 0.8495,
+          "std": 0.0305,
+          "per_fold": [
+            0.8393,
+            0.8182,
+            0.8909
+          ]
+        },
+        "precision_macro": {
+          "mean": 0.8007,
+          "std": 0.0492,
+          "per_fold": [
+            0.854,
+            0.7353,
+            0.8127
+          ]
+        },
+        "recall_macro": {
+          "mean": 0.8356,
+          "std": 0.0262,
+          "per_fold": [
+            0.83,
+            0.8067,
+            0.87
+          ]
+        },
+        "f1_macro": {
+          "mean": 0.7973,
+          "std": 0.0328,
+          "per_fold": [
+            0.8093,
+            0.7525,
+            0.8301
+          ]
+        }
+      },
+      "LinearSVC": {
+        "n_splits": 3,
+        "accuracy": {
+          "mean": 0.8735,
+          "std": 0.0297,
+          "per_fold": [
+            0.875,
+            0.8364,
+            0.9091
+          ]
+        },
+        "precision_macro": {
+          "mean": 0.8278,
+          "std": 0.0609,
+          "per_fold": [
+            0.8773,
+            0.742,
+            0.864
+          ]
+        },
+        "recall_macro": {
+          "mean": 0.8556,
+          "std": 0.0204,
+          "per_fold": [
+            0.87,
+            0.8267,
+            0.87
+          ]
+        },
+        "f1_macro": {
+          "mean": 0.8244,
+          "std": 0.0377,
+          "per_fold": [
+            0.8483,
+            0.7712,
+            0.8536
+          ]
+        }
+      }
+    }
+  },
+  "selected_model": {
+    "name": "LogisticRegression",
+    "criterion": "best mean macro F1 in model_comparison (model must provide probabilities)",
+    "note": "Selected on the same CV folds that are reported, so its CV score is slightly optimistic.",
+    "selection_notes": [
+      "LinearSVC had the best macro F1 but has no predict_proba. CalibratedClassifierCV(cv=3) could not be evaluated on the same 3-fold CV: Requesting 3-fold cross-validation but provided less than 3 examples for at least one class. (the smallest category has too few resumes per training fold). The next best model was selected instead."
+    ]
+  },
+  "cross_validation_dedup": {
+    "model": "LogisticRegression",
+    "n_splits": 3,
+    "accuracy": {
+      "mean": 0.8495,
+      "std": 0.0305,
+      "per_fold": [
+        0.8393,
+        0.8182,
+        0.8909
+      ]
+    },
+    "precision_macro": {
+      "mean": 0.8007,
+      "std": 0.0492,
+      "per_fold": [
+        0.854,
+        0.7353,
+        0.8127
+      ]
+    },
+    "recall_macro": {
+      "mean": 0.8356,
+      "std": 0.0262,
+      "per_fold": [
+        0.83,
+        0.8067,
+        0.87
+      ]
+    },
+    "f1_macro": {
+      "mean": 0.7973,
+      "std": 0.0328,
+      "per_fold": [
+        0.8093,
+        0.7525,
+        0.8301
+      ]
+    }
+  },
+  "holdout_80_20_dedup": {
+    "model": "LogisticRegression",
+    "accuracy": 0.8235,
+    "precision_macro": 0.7433,
+    "recall_macro": 0.8,
+    "f1_macro": 0.7476,
+    "train_size": 132,
+    "test_size": 34
+  },
+  "original_method_no_dedup_for_comparison": {
+    "model": "MultinomialNB",
+    "accuracy": 0.9534,
+    "precision_macro": 0.9782,
+    "recall_macro": 0.9304,
+    "f1_macro": 0.9365,
+    "test_size": 193,
+    "test_resumes_with_identical_copy_in_train": 192
+  },
+  "tuned_model": {
+    "model": "TF-IDF + LogisticRegression(max_iter=1000)",
+    "search_space": {
+      "classifier__C": [
+        0.1,
+        1,
+        10,
+        100
+      ],
+      "classifier__class_weight": [
+        null,
+        "balanced"
+      ],
+      "vectorizer__ngram_range": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "vectorizer__sublinear_tf": [
+        false,
+        true
+      ],
+      "vectorizer__min_df": [
+        1,
+        2
+      ]
+    },
+    "fixed": {
+      "vectorizer__max_features": 10000,
+      "vectorizer__max_df": 0.85
+    },
+    "nested_cv": {
+      "outer": "stratified 3-fold, shuffle=True, random_state=42 (same folds as model_comparison)",
+      "inner": "GridSearchCV, stratified 2-fold, scoring=f1_macro",
+      "accuracy": {
+        "mean": 0.8435,
+        "std": 0.0335,
+        "per_fold": [
+          0.8214,
+          0.8182,
+          0.8909
+        ]
+      },
+      "precision_macro": {
+        "mean": 0.7767,
+        "std": 0.0401,
+        "per_fold": [
+          0.7967,
+          0.7207,
+          0.8127
+        ]
+      },
+      "recall_macro": {
+        "mean": 0.8256,
+        "std": 0.0315,
+        "per_fold": [
+          0.8067,
+          0.8,
+          0.87
+        ]
+      },
+      "f1_macro": {
+        "mean": 0.7791,
+        "std": 0.0369,
+        "per_fold": [
+          0.7632,
+          0.7441,
+          0.8301
+        ]
+      },
+      "best_params_per_outer_fold": [
+        {
+          "classifier__C": 0.1,
+          "classifier__class_weight": "balanced",
+          "vectorizer__min_df": 2,
+          "vectorizer__ngram_range": [
+            1,
+            1
+          ],
+          "vectorizer__sublinear_tf": true
+        },
+        {
+          "classifier__C": 0.1,
+          "classifier__class_weight": "balanced",
+          "vectorizer__min_df": 1,
+          "vectorizer__ngram_range": [
+            1,
+            1
+          ],
+          "vectorizer__sublinear_tf": false
+        },
+        {
+          "classifier__C": 1,
+          "classifier__class_weight": "balanced",
+          "vectorizer__min_df": 2,
+          "vectorizer__ngram_range": [
+            1,
+            2
+          ],
+          "vectorizer__sublinear_tf": false
+        }
+      ]
+    },
+    "note": "These scores come from nested CV: the parameters were chosen only on the outer training folds, so they are an honest estimate for the tuning procedure.",
+    "final_params": {
+      "classifier__C": 1,
+      "classifier__class_weight": "balanced",
+      "vectorizer__min_df": 1,
+      "vectorizer__ngram_range": [
+        1,
+        1
+      ],
+      "vectorizer__sublinear_tf": false
+    },
+    "final_grid_search": "GridSearchCV, stratified 3-fold on all 166 resumes",
+    "final_grid_search_best_cv_f1_macro_optimistic": 0.8341,
+    "untuned_logistic_regression_f1_macro": 0.7973,
+    "saved": false,
+    "decision": "Nested-CV macro F1 0.7791 is not higher than untuned LogisticRegression 0.7973: the untuned LogisticRegression model is kept."
+  },
+  "deployed_model": "LogisticRegression",
+  "model": "TF-IDF (1-2 grams, max_features=10000, min_df=2, max_df=0.85) + LogisticRegression",
+  "random_state": 42,
+  "scikit_learn_version": "1.6.1"
+}
